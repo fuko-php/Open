@@ -17,8 +17,14 @@ use \Fuko\Open\Editor;
 /* I have Atom installed locally, so this is what I want to use */
 $editor = new Editor(Editor::ATOM);
 ```
+Once you have created the `\Fuko\Open\Editor` object, you call its `link()` method
+to get the generated and formatted URL:
+```php
+echo $editor->link('/var/www/html/index.html', 2);
+// atom://core/open/file?filename=%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2
+```
 
-# Sniff
+# Editor Sniff
 
 You can *sniff* what editor is installed locally by using `\Fuko\Open\Sniff::detect()`. It
 will either return a new `\Fuko\Open\Editor` object with the format setup inside it to to
