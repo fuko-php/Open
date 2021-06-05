@@ -1,6 +1,8 @@
-# Fuko\\Open
+# Fuko\\Open [![Latest Version](http://img.shields.io/packagist/v/fuko-php/open.svg)](https://packagist.org/packages/fuko-php/open) [![GitHub license](https://img.shields.io/github/license/fuko-php/open.svg)](https://github.com/fuko-php/open/blob/master/LICENSE) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7e26c25549cc40d99be82b76c95f2f6d)](https://www.codacy.com/gh/fuko-php/open/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fuko-php/open&amp;utm_campaign=Badge_Grade)
 
-Generates links to open referenced files directly in your IDE or editor, or have it linked to an online repository
+**Fuko\\Masked** is a small PHP library that helps you to generate links for
+opening referenced files directly in your IDE or editor, or have it linked to
+an online repository.
 
 # Editor Links
 
