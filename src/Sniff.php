@@ -27,7 +27,7 @@ use function shell_exec;
 * Detect what IDE\editor is installed localy
 *
 * This class will help you detect what editor is installed locally, and use
-* that to generate reference links to files from the source code 
+* that to generate reference links to files from the source code
 *
 * @package Fuko\Open
 */
@@ -55,26 +55,26 @@ class Sniff
 		{
 			// negative position, add it at the end of the list
 			//
-			$this->detectors[] = $detector;
+			self::$detectors[] = $detector;
 		} else
-		if ($pos >= ($count = count($this->detectors)))
+		if ($pos >= ($count = count(self::$detectors)))
 		{
 			// out of range, add it at the end of the list
 			//
-			$this->detectors[] = $detector;
+			self::$detectors[] = $detector;
 		} else
 		{
 			// insert it at a specific position
 			//
 			$result = array_merge(
-				array_slice($this->detectors, 0, $pos),
+				array_slice(self::$detectors, 0, $pos),
 				array($pos => $detector),
 				array_slice(
-					$this->detectors, $pos,
+					self::$detectors, $pos,
 					$count - $pos, true)
 				);
 
-			$this->detectors = $result;
+			self::$detectors = $result;
 		}
 	}
 
