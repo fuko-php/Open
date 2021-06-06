@@ -12,11 +12,13 @@ class LinkTest extends TestCase
 {
 	/**
 	* @covers Fuko\Open\Link::__construct()
+	* @covers Fuko\Open\Link::__invoke()
+	* @covers Fuko\Open\Link::link()
 	*/
 	function testBlankLinkFormat()
 	{
 		$link = new Link(Editor::BLANK);
-		$this->assertEquals( $link->link('a', 1), 'a:1');
+		$this->assertEquals( $link('a', 1), 'a:1');
 	}
 
 	/**

@@ -36,12 +36,6 @@ class Repo
 	protected $folder = '';
 
 	/**
-	* @var string website hosting the repos, e.g. "https://github.com"
-	*	or "https://bitbucket.org"
-	*/
-	protected $website = '';
-
-	/**
 	* @var string workspace, aka project or account, e.g. "fuko-php"
 	*	for https://github.com/fuko-php
 	*/
@@ -60,41 +54,41 @@ class Repo
 	protected $ref = '';
 
 	function __construct(
+		string $format,
 		string $folder,
+
 		string $workspace,
 		string $repository,
-		string $ref,
-		string $website = null)
+		string $ref)
 	{
+		$this->format = $format;
 		$this->folder = $folder;
 
 		$this->workspace = $workspace;
 		$this->repository = $repository;
 		$this->ref = $ref;
-
-		if (null !== $website)
-		{
-			$this->website = $website;
-		}
-	}
-
-
-
-	function useFormat(string $format) : self
-	{
-		$this->format = $format;
-		return $this;
 	}
 
 	function getLink() : Link
 	{
 		$format = sprintf($this->format,
-			$this->website,
 			$this->workspace,
 			$this->repository,
 			$this->ref
 			);
 
-		return (new Link($format))->addPrefix($folder, '');
+		return (new Link($format))->addPrefix($this->folder, '');
 	}
+
+	/**
+	* Bitbucket Cloud
+	* format: "https://bitbucket.org/{$workspace}/{$repository}/src/{$ref}/{$file}#lines-{$line}"
+	*/
+	const BITBUCKET = 'https://bitbucket.org/%s/%s/src/%s/%%s#lines-%%d';
+
+	/**
+	* GitHub
+	* format: "https://github.com/{$workspace}/{$repository}/blob/{$ref}/{$file}#L{$line}"
+	*/
+	const GITHUB = 'https://github.com/%s/%s/blob/%s/%%s#L%%d';
 }
