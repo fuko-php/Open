@@ -57,7 +57,7 @@ class LinkTest extends TestCase
 			'%2Fupside%2Fdown%2Ftests%2FLinkTest.php:42'
 		);
 
-		$link->clearPrefixes()->addPrefix($cwd = getcwd() . '/', '/');
+		$link->clearPrefixes()->addPrefix($cwd, '/');
 
 		$this->assertEquals(
 			$link(__FILE__, 42),
