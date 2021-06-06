@@ -26,13 +26,13 @@ the file, and the second one is `%d` for the line. That's it, it's pretty simple
 There are occasions when leading portions of the filenames must be "translated" to
 something different, like when:
 
- -  like when you get the real path to a file after some of its parent folders
+-  like when you get the real path to a file after some of its parent folders
 	was a symlink that was resolved to its real source;
 
- -  like when you've mounted a shared network volume with your web server machine,
+-  like when you've mounted a shared network volume with your web server machine,
 	and you want to use the locally mounted names, and not the remote ones
 
- -  or like when you are using Docker and you want to translate the Docker-based
+-  or like when you are using Docker and you want to translate the Docker-based
 	filenames to your locally-accessible filenames.
 
 For all of those cases, the `\Fuko\Open\Link` objects have the ability to replace
