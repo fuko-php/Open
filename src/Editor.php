@@ -9,8 +9,7 @@
 
 namespace Fuko\Open;
 
-use function rawurlencode;
-use function sprintf;
+use Fuko\Open\Link;
 
 /**
 * Editor\IDE Link
@@ -19,41 +18,12 @@ use function sprintf;
 *
 * @package Fuko\Open
 */
-class Editor
+class Editor extends Link
 {
 	/**
 	* "Blank" format that only contains the file and the line
 	*/
 	const BLANK = '%s:%d';
-
-	/**
-	* @var string {@link sprintf}-based format to use when generating
-	*	the IDE\editor link, where the first placeholder "%s" is
-	*	the filename, and the second one "%d" is the line
-	*/
-	protected $format = '';
-
-	/**
-	* Editor Constructor
-	*
-	* @param string $format link format
-	*/
-	function __construct(string $format)
-	{
-		$this->format = $format;
-	}
-
-	/**
-	* Generate the link to use for the provided $file and $line
-	*
-	* @param string $file
-	* @param int $line
-	* @return string
-	*/
-	function link(string $file, int $line) : string
-	{
-		return sprintf($this->format, rawurlencode($file), $line);
-	}
 
 	/**
 	* Atom Editor
