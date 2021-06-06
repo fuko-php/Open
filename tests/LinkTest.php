@@ -43,6 +43,7 @@ class LinkTest extends TestCase
 	/**
 	* @covers Fuko\Open\Link::addPrefix()
 	* @covers Fuko\Open\Link::link()
+	* @covers Fuko\Open\Link::__invoke()
 	*/
 	function testLinkPrefix()
 	{
@@ -57,7 +58,7 @@ class LinkTest extends TestCase
 		$link->clearPrefixes()->addPrefix($cwd = getcwd() . '/', '/');
 
 		$this->assertEquals(
-			$link->link(__FILE__, 42),
+			$link(__FILE__, 42),
 			'%2Ftests%2FLinkTest.php:42'
 		);
 	}

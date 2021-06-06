@@ -106,4 +106,18 @@ class Link
 
 		return sprintf($this->format, rawurlencode($source_file), $line);
 	}
+
+	/**
+	* Shortcut for calling {@link \Fuko\Open\Link::link()}
+	*
+	* @param string $file
+	* @param int $line
+	* @return string
+	*
+	* @uses \Fuko\Open\Link::link()
+	*/
+	function __invoke(string $file, int $line) : string
+	{
+		return $this->link($file, $line);
+	}
 }

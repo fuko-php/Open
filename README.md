@@ -26,6 +26,11 @@ to get the generated and formatted URL:
 echo $editor->link('/var/www/html/index.html', 2);
 // atom://core/open/file?filename=%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2
 ```
+The `\Fuko\Open\Link::link()` method is also called if you do `\Fuko\Open\Link::__invoke()`, so
+you can also just do this:
+```php
+echo $editor('/var/www/html/index.html', 2);
+```
 
 # Editor Sniff
 
@@ -41,7 +46,7 @@ use \Fuko\Open\Sniff;
 $editor = (new Sniff)->detect();
 if ($editor)
 {
-	echo $editor->link('/var/www/html/index.html', 2);
+	echo $editor('/var/www/html/index.html', 2);
 	// atom://core/open/file?filename=%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2
 }
 ```
