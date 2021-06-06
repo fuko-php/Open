@@ -10,6 +10,7 @@
 namespace Fuko\Open;
 
 use \Fuko\Open\Editor;
+use \Fuko\Open\Link;
 
 use const DIRECTORY_SEPARATOR;
 
@@ -126,15 +127,15 @@ class Sniff
 	/**
 	* Run the sniffers and try to sniff what editor is installed
 	*
-	* @return null|\Fuko\Open\Editor
+	* @return null|\Fuko\Open\Link
 	*/
-	function detect() :? Editor
+	function detect() :? Link
 	{
 		foreach ($this->sniffers as $sniffer)
 		{
 			if ($format = $sniffer())
 			{
-				return new Editor($format);
+				return new Link($format);
 			}
 		}
 

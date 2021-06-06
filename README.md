@@ -15,11 +15,12 @@ To generate such URLs you must use the format associated with that editor:
 ```php
 include __DIR__ . '/vendor/autoload.php';
 use \Fuko\Open\Editor;
+use \Fuko\Open\Link;
 
 /* I have Atom installed locally, so this is what I want to use */
-$editor = new Editor(Editor::ATOM);
+$editor = new Link(Editor::ATOM);
 ```
-Once you have created the `\Fuko\Open\Editor` object, you call its `link()` method
+Once you have created the `\Fuko\Open\Link` object, you call its `link()` method
 to get the generated and formatted URL:
 ```php
 echo $editor->link('/var/www/html/index.html', 2);
@@ -29,7 +30,7 @@ echo $editor->link('/var/www/html/index.html', 2);
 # Editor Sniff
 
 You can *sniff* what editor is installed locally by using `\Fuko\Open\Sniff::detect()`. It
-will either return a new `\Fuko\Open\Editor` object with the format setup inside it to to
+will either return a new `\Fuko\Open\Link` object with the format setup inside it to to
 use, or if nothing is found it will return `NULL`.
 
 ```php
@@ -47,7 +48,7 @@ if ($editor)
 
 The sniffing is done using "sniffer" functions/methods. There are some that are built-in,
 but you can add your own using `\Fuko\Open\Sniff::addSniffer()`. The sniffers must
-return either the format to use in the `\Fuko\Open\Editor` constructor, or an empty string if
+return either the format to use in the `\Fuko\Open\Link` constructor, or an empty string if
 there is no match.
 
 ```php

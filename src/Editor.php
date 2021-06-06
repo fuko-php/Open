@@ -12,13 +12,13 @@ namespace Fuko\Open;
 use Fuko\Open\Link;
 
 /**
-* Editor\IDE Link
+* Editor\IDE Link Formats
 *
 * This class also contains a list of known editors and their code reference formats
 *
 * @package Fuko\Open
 */
-class Editor extends Link
+class Editor
 {
 	/**
 	* "Blank" format that only contains the file and the line
