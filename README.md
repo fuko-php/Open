@@ -4,6 +4,8 @@
 opening referenced files directly in your IDE or editor, or have it linked to
 an online repository.
 
+## Basic Use
+
 At the heart of it is all is the `\Fuko\Open\Link` class, which is really simple: it
 takes a format to use in its constructor, and then using that format it creates a
 formatted link to a code reference identified by its **file** and **line**:
@@ -18,6 +20,47 @@ $href = $link->link(__FILE__, __LINE__);
 
 The format is `sprintf()`-based, with two placeholders: first one is `%s` for
 the file, and the second one is `%d` for the line. That's it, it's pretty simple.
+
+### Translating Paths
+
+There are occasions when leading portions of the filenames must be "translated" to
+something different, like when:
+
+-  like when you get the real path to a file after some of its parent folders
+	was a symlink that was resolved to its real source;
+
+-  like when you've mounted a shared network volume with your web server machine,
+	and you want to use the locally mounted names, and not the remote ones
+
+- or like when you are using Docker and you want to translate the Docker-based
+	filenames to your locally-accessible filenames.
+
+For all of those cases, the `\Fuko\Open\Link` objects have the ability to replace
+leading filename prefixes. You can add a new prefix for translating a file path
+like this:
+
+```php
+include __DIR__ . '/vendor/autoload.php';
+use \Fuko\Open\Link;
+
+$link = new Link('source-code://%s:%d');
+$link->addPrefix(getcwd() . '/', '/upside/down/');
+$href = $link->link(__FILE__, __LINE__);
+// source-code://%2Fupside%2Fdown%2Fdemo.php:23
+```
+
+You can add multiple prefixes, as usually there is more than one symlinked folder
+in most projects.
+
+```php
+include __DIR__ . '/vendor/autoload.php';
+use \Fuko\Open\{Link, Editor};
+
+$href = (new Link(Editor::ATOM))
+	->addPrefix(getcwd() . '/', '/upside/down/')
+	->addPrefix('/private/tmp', 'tmp')
+	->link(__FILE__, __LINE__);
+```
 
 ## Editor Links
 
