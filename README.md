@@ -19,7 +19,7 @@ $href = $link->link(__FILE__, __LINE__);
 The format is `sprintf()`-based, with two placeholders: first one is `%s` for
 the file, and the second one is `%d` for the line. That's it, it's pretty simple.
 
-# Editor Links
+## Editor Links
 
 There are several IDEs and editors that support special URL format for local
 files with the purpose to allow them to open them directly. This feature will
@@ -47,7 +47,7 @@ you can also just do this:
 echo $editor('/var/www/html/index.html', 2);
 ```
 
-## Editor Sniff
+### Editor Sniff
 
 You can *sniff* what editor is installed locally by using `\Fuko\Open\Sniff::detect()`. It
 will either return a new `\Fuko\Open\Link` object with the format setup inside it to to
@@ -80,7 +80,7 @@ $sniff->addSniffer(function()
 });
 ```
 
-## Supported Editors
+### Supported Editors
 
 This is the list of the IDEs and editors supported by **Fuko\\Open**
 
@@ -97,7 +97,7 @@ This is the list of the IDEs and editors supported by **Fuko\\Open**
 | [TextMate](https://macromates.com/manual/en)        | `\Fuko\Open\Editor::TEXTMATE` |
 | [Visual Studio Code](https://code.visualstudio.com) | `\Fuko\Open\Editor::VSCODE`   |
 
-# Repo Links
+## Repo Links
 
 There are situations in which you do not want to create links to local source code files,
 but instead link to your code repository. Code repo source links usually contain not
@@ -123,5 +123,5 @@ echo $repo->getLink()->link(__FILE__, 42);
 There constants inside the `Fuko\Open\Repo` class to help you with the formats for
 the different source-code hosting websites:
 
-* `Fuko\Open\Repo::BITBUCKET` is for [Bitbucket Cloud](https://bitbucket.org)
-* `Fuko\Open\Repo::GITHUB` is for [GitHub](https://github.com)
+ - `Fuko\Open\Repo::BITBUCKET` is for [Bitbucket Cloud](https://bitbucket.org)
+ - `Fuko\Open\Repo::GITHUB` is for [GitHub](https://github.com)
