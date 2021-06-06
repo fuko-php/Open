@@ -92,6 +92,7 @@ This is the list of the IDEs and editors supported by **Fuko\\Open**
 | [IntelliJ IDEA](https://www.jetbrains.com/idea)     | `\Fuko\Open\Editor::IDEA`     |
 | [Mac Vim](https://macvim-dev.github.io/macvim)      | `\Fuko\Open\Editor::MACVIM`   |
 | [Apache NetBeans](https://netbeans.apache.org)      | `\Fuko\Open\Editor::NETBEANS` |
+| [Nova](https://nova.app)                            | `\Fuko\Open\Editor::NOVA`     |
 | [PhpStorm](https://www.jetbrains.com/phpstorm)      | `\Fuko\Open\Editor::PHPSTORM` |
 | [Sublime Text](http://www.sublimetext.com)          | `\Fuko\Open\Editor::SUBLIME`  |
 | [TextMate](https://macromates.com/manual/en)        | `\Fuko\Open\Editor::TEXTMATE` |

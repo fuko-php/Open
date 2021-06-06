@@ -63,6 +63,12 @@ class Editor
 	const NETBEANS = 'netbeans://open/?f=%s:%d';
 
 	/**
+	* Nova
+	* @link https://nova.app
+	*/
+	const NOVA = 'nova://core/open/file?filename=%s&line=%d';
+
+	/**
 	* PhpStorm
 	* @link https://www.jetbrains.com/phpstorm
 	*/
