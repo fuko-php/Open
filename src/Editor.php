@@ -64,13 +64,13 @@ class Editor
 
 	/**
 	* GNU Emacs
-	* @link https://www.gnu.org/software/emacs/
+	* @link https://www.gnu.org/software/emacs
 	*/
 	const EMACS = 'emacs://open?url=file://%s&line=%d';
 
 	/**
 	* Espresso
-	* @link https://www.espressoapp.com/
+	* @link https://www.espressoapp.com
 	*/
 	const ESPRESSO = 'x-espresso://open?filepath=%s&lines=%d';
 

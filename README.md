@@ -58,3 +58,20 @@ $sniff->addSniffer(function()
 		: '';
 });
 ```
+
+# Supported Editors
+
+This is the list of the IDEs and editors supported by **Fuko\\Open**
+
+| Editor                                              | Format Const                  |
+|-----------------------------------------------------|-------------------------------|
+| [Atom](https://atom.io)                             | `\Fuko\Open\Editor::ATOM`     |
+| [GNU Emacs](https://www.gnu.org/software/emacs)     | `\Fuko\Open\Editor::EMACS`    |
+| [Espresso](https://www.espressoapp.com)             | `\Fuko\Open\Editor::ESPRESSO` |
+| [IntelliJ IDEA](https://www.jetbrains.com/idea)     | `\Fuko\Open\Editor::IDEA`     |
+| [Mac Vim](https://macvim-dev.github.io/macvim)      | `\Fuko\Open\Editor::MACVIM`   |
+| [Apache NetBeans](https://netbeans.apache.org)      | `\Fuko\Open\Editor::NETBEANS` |
+| [PhpStorm](https://www.jetbrains.com/phpstorm)      | `\Fuko\Open\Editor::PHPSTORM` |
+| [Sublime Text](http://www.sublimetext.com)          | `\Fuko\Open\Editor::SUBLIME`  |
+| [TextMate](https://macromates.com/manual/en)        | `\Fuko\Open\Editor::TEXTMATE` |
+| [Visual Studio Code](https://code.visualstudio.com) | `\Fuko\Open\Editor::VSCODE`   |
