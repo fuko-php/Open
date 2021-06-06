@@ -123,5 +123,5 @@ echo $repo->getLink()->link(__FILE__, 42);
 There constants inside the `Fuko\Open\Repo` class to help you with the formats for
 the different source-code hosting websites:
 
- - `Fuko\Open\Repo::BITBUCKET` is for [Bitbucket Cloud](https://bitbucket.org)
- - `Fuko\Open\Repo::GITHUB` is for [GitHub](https://github.com)
+-  `Fuko\Open\Repo::BITBUCKET` is for [Bitbucket Cloud](https://bitbucket.org)
+-  `Fuko\Open\Repo::GITHUB` is for [GitHub](https://github.com)
