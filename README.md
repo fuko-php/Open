@@ -37,7 +37,7 @@ include __DIR__ . '/vendor/autoload.php';
 use \Fuko\Open\Sniff;
 
 /* I have Atom installed locally, so this is how you can detect it */
-$editor = Sniff::detect();
+$editor = (new Sniff)->detect();
 if ($editor)
 {
 	echo $editor->link('/var/www/html/index.html', 2);
@@ -45,13 +45,13 @@ if ($editor)
 }
 ```
 
-The sniffing is done using "detector" functions/methods. There are some that are built-in,
-but you can add your own using `\Fuko\Open\Sniff::addDetector()`. The detectors must
+The sniffing is done using "sniffer" functions/methods. There are some that are built-in,
+but you can add your own using `\Fuko\Open\Sniff::addSniffer()`. The sniffers must
 return either the format to use in the `\Fuko\Open\Editor` constructor, or an empty string if
 there is no match.
 
 ```php
-\Fuko\Open\Sniff::addDetector(function()
+$sniff->addSniffer(function()
 {
 	return getenv('EDITOR') === 'subl -w'
 		? \Fuko\Open\Editor::SUBLIME

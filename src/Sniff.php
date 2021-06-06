@@ -17,14 +17,16 @@ use function array_key_exists;
 use function array_merge;
 use function array_slice;
 use function count;
-use function file_exists;
 use function get_cfg_var;
 use function getenv;
 use function ini_get;
+use function is_file;
+use function is_link;
 use function shell_exec;
+use function str_replace;
 
 /**
-* Detect what IDE\editor is installed localy
+* Sniff (detect) what IDE\editor is installed localy
 *
 * This class will help you detect what editor is installed locally, and use
 * that to generate reference links to files from the source code
@@ -34,81 +36,103 @@ use function shell_exec;
 class Sniff
 {
 	/**
-	* @var array list of detector callbacks to check whether certain editors are available
+	* @var array default list of sniffers
+	* @todo sort the sniffers based on the popularity of the IDEs\editors
 	*/
-	static protected $detectors = array(
-		'\\Fuko\\Open\\Sniff::detectAtom',
+	const DEFAULT = array(
 		'\\Fuko\\Open\\Sniff::detectSublime',
+		'\\Fuko\\Open\\Sniff::detectAtom',
 		'\\Fuko\\Open\\Sniff::detectTextMate',
 		'\\Fuko\\Open\\Sniff::detectXDebug',
 		);
 
 	/**
-	* Add a new detector
-	*
-	* @param callable $detector
-	* @param int $pos position, "-1" means append at the end, "0" is to prepend
+	* @var array list of sniffers
 	*/
-	static function addDetector(callable $detector, int $pos = -1)
+	protected $sniffers = array();
+
+	/**
+	* Constructor
+	*
+	* @param array $sniffers
+	*/
+	function __construct(array $sniffers = null)
+	{
+		if (null === $sniffers)
+		{
+			$sniffers = static::DEFAULT;
+		}
+
+		foreach ($sniffers as $sniffer)
+		{
+			$this->addSniffer($sniffer);
+		}
+	}
+
+	/**
+	* Add a new sniffer
+	*
+	* @param callable $sniffer
+	* @param int $pos position, "-1" means append at the end, "0" is to prepend
+	* @return self
+	*/
+	function addSniffer(callable $sniffer, int $pos = -1) : self
 	{
 		if ($pos < 0)
 		{
 			// negative position, add it at the end of the list
 			//
-			self::$detectors[] = $detector;
+			$this->sniffers[] = $sniffer;
 		} else
-		if ($pos >= ($count = count(self::$detectors)))
+		if ($pos >= ($count = count($this->sniffers)))
 		{
 			// out of range, add it at the end of the list
 			//
-			self::$detectors[] = $detector;
+			$this->sniffers[] = $sniffer;
 		} else
 		{
 			// insert it at a specific position
 			//
 			$result = array_merge(
-				array_slice(self::$detectors, 0, $pos),
-				array($pos => $detector),
+				array_slice($this->sniffers, 0, $pos),
+				array($pos => $sniffer),
 				array_slice(
-					self::$detectors, $pos,
+					$this->sniffers, $pos,
 					$count - $pos, true)
 				);
 
-			self::$detectors = $result;
+			$this->sniffers = $result;
 		}
+
+		return $this;
 	}
 
-	static function dropDetector(int $pos) : bool
+	function clearSniffers() : self
 	{
-		if (!isset(self::$detectors[ $pos ]))
-		{
-			return false;
-		}
-
-		unset(self::$detectors[ $pos ]);
-		return true;
+		$this->sniffers = [];
+		return $this;
 	}
 
 	/**
-	* Get the list of current detectors
+	* Get the list of current sniffers
 	*
 	* @return array
 	*/
-	static function getDetectors() : array
+	function getSniffers() : array
 	{
-		return self::$detectors;
+		return $this->sniffers;
 	}
 
 	/**
-	* Run the detectors and try to sniff what editor is installed
+	* Run the sniffers and try to sniff what editor is installed
 	*
 	* @return null|\Fuko\Open\Editor
 	*/
-	static function detect() :? Editor
+	function detect() :? Editor
 	{
-		foreach (self::$detectors as $detector)
+		foreach ($this->sniffers as $sniffer)
 		{
-			if ($format = $detector())
+			if ($format = $sniffer())
 			{
 				return new Editor($format);
 			}
@@ -118,27 +142,27 @@ class Sniff
 	}
 
 	/**
-	* Check against the EDITOR env
+	* Check $command against the EDITOR env
 	*
-	* @param string $match
+	* @param string $command
 	* @return boolean
 	*/
-	private static function isEditor(string $match) : bool
+	static function isEnvEditor(string $command) : bool
 	{
-		return getenv('EDITOR') == $match;
+		return getenv('EDITOR') == $command;
 	}
 
 	/**
-	* Check whether the binary is availables
+	* Check whether the $command binary is available
 	*
-	* @param string $match
+	* @param string $command
 	* @return boolean
 	*/
-	private static function isBin(string $match) : bool
+	static function isBin(string $command) : bool
 	{
 		if (DIRECTORY_SEPARATOR === '/') /* unix, linux, mac */
 		{
-			$bin = shell_exec("which {$match}");
+			$bin = shell_exec("which {$command}");
 			return trim($bin) ? true : false;
 		}
 
@@ -151,41 +175,30 @@ class Sniff
 	}
 
 	/**
-	* Check whether provided list of files has a match
-	*
-	* @param string ...$files
-	* @return boolean
-	*/
-	private static function filesExists(...$files) : bool
-	{
-		foreach ($files as $file)
-		{
-			if (file_exists($file))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	* Detect if Atom is installed locally
 	*
 	* @return string empty string or the format to use
+	*
 	* @link https://flight-manual.atom.io/getting-started/sections/installing-atom/
+	* @link https://discuss.atom.io/t/atom-does-not-appear-in-program-files-windows-10/31550
 	*/
 	static function detectAtom() : string
 	{
 		switch (true)
 		{
 			case self::isBin('atom'):
-			case self::filesExists(
-				'/usr/local/bin/atom',
-				/* Mac */ '/Applications/Atom.app/Contents/Resources/app/atom.sh'
-				/* Linux */ // ?
-				/* Win */ // ?
-				):
+
+			case is_link('/usr/local/bin/atom') :
+			case is_file('/usr/local/bin/atom') :
+
+			// Mac
+			//
+			case is_file('/Applications/Atom.app/Contents/Resources/app/atom.sh'):
+
+			// Windows: "Atom doesn't install into Program Files, it installs into %USER%\AppData\Local\atom\atom.exe"
+			//
+			case is_file('C:\\Users\\' . getenv('USER'). '\\AppData\\Local\\atom\\atom.exe'):
+
 				return Editor::ATOM;
 				break;
 		}
@@ -203,15 +216,25 @@ class Sniff
 	{
 		switch (true)
 		{
-			case self::isEditor('subl -w'):
+			case self::isEnvEditor('subl -w'):
 			case self::isBin('subl'):
-			case self::filesExists(
-				'/usr/local/bin/subl',
-				/* Mac */ '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl',
-				/* Linux */ '/opt/sublime_text/sublime_text',
-				/* Win */ 'C:\\Program Files\\Sublime Text\\subl.exe',
-				/* Win */ 'C:\\Program Files (x86)\\Sublime Text\\subl.exe'
-				):
+
+			case is_link('/usr/local/bin/subl') :
+			case is_file('/usr/local/bin/subl') :
+
+			// Mac
+			//
+			case is_file('/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl'):
+
+			// Linux
+			//
+			case is_file('/opt/sublime_text/sublime_text'):
+
+			// Windows
+			//
+			case is_file('C:\\Program Files\\Sublime Text\\subl.exe'):
+			case is_file('C:\\Program Files (x86)\\Sublime Text\\subl.exe'):
+
 				return Editor::SUBLIME;
 				break;
 		}
@@ -229,12 +252,16 @@ class Sniff
 	{
 		switch (true)
 		{
-			case self::isEditor('mate -w'):
+			case self::isEnvEditor('mate -w'):
 			case self::isBin('mate'):
-			case self::filesExists(
-				'/usr/local/bin/mate',
-				/* Mac */ '/Applications/TextMate.app/Contents/Resources/mate'
-				):
+
+			case is_link('/usr/local/bin/mate') :
+			case is_file('/usr/local/bin/mate') :
+
+			// Mac
+			//
+			case is_file('/Applications/TextMate.app/Contents/Resources/mate'):
+
 				return Editor::TEXTMATE;
 				break;
 		}

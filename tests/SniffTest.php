@@ -6,54 +6,32 @@ use Fuko\Open\Editor;
 use Fuko\Open\Sniff;
 use PHPUnit\Framework\TestCase;
 
-use function array_values;
 use function putenv;
 
 class SniffTest extends TestCase
 {
-	protected $detectors = [];
-
-	protected function clearDetectors()
-	{
-		$detectors = Sniff::getDetectors();
-		foreach ($detectors as $pos => $dummy)
-		{
-			Sniff::dropDetector($pos);
-		}
-	}
-
-	function setUp()
-	{
-		$this->detectors = Sniff::getDetectors();
-		$this->clearDetectors();
-	}
-
-	function tearDown()
-	{
-		$this->clearDetectors();
-		foreach ($this->detectors as $detector)
-		{
-			Sniff::addDetector($detector);
-		}
-	}
-
 	/**
 	* @covers Fuko\Open\Sniff::detect()
 	* @covers Fuko\Open\Sniff::detectSublime()
-	* @covers Fuko\Open\Sniff::addDetector()
+	* @covers Fuko\Open\Sniff::addSniffer()
+	* @covers Fuko\Open\Sniff::isEnvEditor()
 	*/
 	function testDetectSublime()
 	{
 		putenv("EDITOR=subl -w");
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectSublime');
-
 		$this->assertEquals(
 			Sniff::detectSublime(),
 			Editor::SUBLIME
 			);
+		$this->assertTrue(
+			Sniff::isEnvEditor('subl -w')
+			);
+
+		$sniff = new Sniff([]);
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectSublime');
 
 		$this->assertEquals(
-			(Sniff::detect())->link('/var/www/html/index.html', 2),
+			$sniff->detect()->link('/var/www/html/index.html', 2),
 			'subl://open?url=file://%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2'
 			);
 	}
@@ -61,39 +39,41 @@ class SniffTest extends TestCase
 	/**
 	* @covers Fuko\Open\Sniff::detect()
 	* @covers Fuko\Open\Sniff::detectTextMate()
-	* @covers Fuko\Open\Sniff::addDetector()
+	* @covers Fuko\Open\Sniff::addSniffer()
 	*/
 	function testDetectTextMate()
 	{
 		putenv("EDITOR=mate -w");
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectTextMate');
-
 		$this->assertEquals(
 			Sniff::detectTextMate(),
 			Editor::TEXTMATE
 			);
 
+		$sniff = new Sniff([]);
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectTextMate');
+
 		$this->assertEquals(
-			(Sniff::detect())->link('/var/www/html/index.html', 2),
+			$sniff->detect()->link('/var/www/html/index.html', 2),
 			'txmt://open?url=file://%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2'
 			);
 	}
 
 	/**
-	* @covers Fuko\Open\Sniff::addDetector()
-	* @covers Fuko\Open\Sniff::getDetectors()
-	* @covers Fuko\Open\Sniff::dropDetector()
+	* @covers Fuko\Open\Sniff::addSniffer()
+	* @covers Fuko\Open\Sniff::getSniffers()
+	* @covers Fuko\Open\Sniff::clearSniffers()
 	*/
-	function testDetectors()
+	function testAddClearSniffers()
 	{
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectAtom');
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectSublime');
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectTextMate');
-		Sniff::addDetector('\\Fuko\\Open\\Sniff::detectXDebug');
+		$sniff = new Sniff([]);
 
-		$detectors = Sniff::getDetectors();
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectAtom');
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectSublime');
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectTextMate');
+		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectXDebug');
+
 		$this->assertEquals(
-			array_values( $detectors ),
+			$sniff->getSniffers(),
 			array(
 			'\\Fuko\\Open\\Sniff::detectAtom',
 			'\\Fuko\\Open\\Sniff::detectSublime',
@@ -101,9 +81,8 @@ class SniffTest extends TestCase
 			'\\Fuko\\Open\\Sniff::detectXDebug',
 		));
 
-		$this->clearDetectors();
 		$this->assertEquals(
-			Sniff::getDetectors(),
+			$sniff->clearSniffers()->getSniffers(),
 			array()
 		);
 	}
