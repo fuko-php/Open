@@ -43,6 +43,16 @@ class Link
 	}
 
 	/**
+	* Get the link format
+	*
+	* @return string 
+	*/
+	function getFormat() : string
+	{
+		return $this->format;
+	}
+
+	/**
 	* @var array two-elements arrays that will be used to replace
 	*	leading prefixes of filenames
 	*/

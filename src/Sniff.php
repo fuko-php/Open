@@ -127,15 +127,15 @@ class Sniff
 	/**
 	* Run the sniffers and try to sniff what editor is installed
 	*
-	* @return null|\Fuko\Open\Link
+	* @return null|string
 	*/
-	function detect() :? Link
+	function detect() :? string
 	{
 		foreach ($this->sniffers as $sniffer)
 		{
 			if ($format = $sniffer())
 			{
-				return new Link($format);
+				return $format;
 			}
 		}
 

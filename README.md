@@ -93,18 +93,17 @@ echo $editor('/var/www/html/index.html', 2);
 ### Editor Sniff
 
 You can *sniff* what editor is installed locally by using `\Fuko\Open\Sniff::detect()`. It
-will either return a new `\Fuko\Open\Link` object with the format setup inside it to to
-use, or if nothing is found it will return `NULL`.
+will either return the editor link format found, or if nothing is found it will return `NULL`.
 
 ```php
 include __DIR__ . '/vendor/autoload.php';
-use \Fuko\Open\Sniff;
+use \Fuko\Open\{Link, Sniff};
 
 /* I have Atom installed locally, so this is how you can detect it */
-$editor = (new Sniff)->detect();
-if ($editor)
+$format = (new Sniff)->detect();
+if ($format)
 {
-	echo $editor('/var/www/html/index.html', 2);
+	echo (new Link($format))->link('/var/www/html/index.html', 2);
 	// atom://core/open/file?filename=%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2
 }
 ```

@@ -2,8 +2,7 @@
 
 namespace Fuko\Open\Tests;
 
-use Fuko\Open\Editor;
-use Fuko\Open\Sniff;
+use Fuko\Open\{Editor, Link, Sniff};
 use PHPUnit\Framework\TestCase;
 
 use function putenv;
@@ -31,7 +30,7 @@ class SniffTest extends TestCase
 		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectSublime');
 
 		$this->assertEquals(
-			$sniff->detect()->link('/var/www/html/index.html', 2),
+			(new Link( $sniff->detect() ))->link('/var/www/html/index.html', 2),
 			'subl://open?url=file://%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2'
 			);
 	}
@@ -53,7 +52,7 @@ class SniffTest extends TestCase
 		$sniff->addSniffer('\\Fuko\\Open\\Sniff::detectTextMate');
 
 		$this->assertEquals(
-			$sniff->detect()->link('/var/www/html/index.html', 2),
+			(new Link( $sniff->detect() ))->link('/var/www/html/index.html', 2),
 			'txmt://open?url=file://%2Fvar%2Fwww%2Fhtml%2Findex.html&line=2'
 			);
 	}
