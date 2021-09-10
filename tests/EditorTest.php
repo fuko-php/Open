@@ -98,4 +98,13 @@ class EditorTest extends TestCase
 			'vscode://file/a%2Fb%2Fc.d:12'
 			);
 	}
+
+	function testVSCodium()
+	{
+		$link = new Link(Editor::VSCODIUM);
+		$this->assertEquals(
+			$link->link('a/b/c.d', 12),
+			'vscodium://file/a%2Fb%2Fc.d:12'
+			);
+	}
 }

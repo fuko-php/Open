@@ -94,4 +94,10 @@ class Editor
 	* @see https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
 	*/
 	const VSCODE = 'vscode://file/%s:%d';
+
+	/**
+	* VSCodium
+	* @link https://vscodium.com/
+	*/
+	const VSCODIUM = 'vscodium://file/%s:%d';
 }

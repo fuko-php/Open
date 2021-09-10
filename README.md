@@ -139,6 +139,7 @@ This is the list of the IDEs and editors supported by **Fuko\\Open**
 | [Sublime Text](http://www.sublimetext.com)          | `\Fuko\Open\Editor::SUBLIME`  |
 | [TextMate](https://macromates.com/manual/en)        | `\Fuko\Open\Editor::TEXTMATE` |
 | [Visual Studio Code](https://code.visualstudio.com) | `\Fuko\Open\Editor::VSCODE`   |
+| [VSCodium](https://vscodium.com)                    | `\Fuko\Open\Editor::VSCODIUM` |
 
 ## Repo Links
 
