@@ -97,7 +97,7 @@ class Editor
 
 	/**
 	* VSCodium
-	* @link https://vscodium.com/
+	* @link https://vscodium.com
 	*/
 	const VSCODIUM = 'vscodium://file/%s:%d';
 }
